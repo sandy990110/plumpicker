@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Plumpickers — Theatre / Media / Entertainment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #D94A3A;
+      --yellow: #F5C842;
+      --blue: #87C4D4;
+      --cream: #F9F3EC;
+      --pink: #F2BEBC;
+      --dark: #1A1A1A;
+      --text: #3A3A3A;
+      --muted: #888;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--cream);
+      border-bottom: 1px solid #e8e0d8;
+      position: sticky; top: 0; z-index: 100;
+      padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px; font-style: italic;
+      color: var(--red);
+      letter-spacing: -0.5px;
+    }
+    .nav-links { display: flex; gap: 8px; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500; color: var(--text);
+      padding: 6px 14px; border-radius: 20px;
+      transition: background .2s;
+    }
+    .nav-links a.active, .nav-links a:hover {
+      background: var(--red); color: #fff;
+    }
+    .nav-icons { display: flex; gap: 16px; align-items: center; }
+    .nav-icons span {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #eee; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 15px; transition: background .2s;
+    }
+    .nav-icons span:hover { background: var(--red); color: #fff; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      padding: 12px 40px;
+      font-size: 12px; color: var(--muted);
+    }
+    .breadcrumb a { color: var(--muted); }
+    .breadcrumb a:hover { color: var(--red); }
+
+    /* ── ARTICLE WRAPPER ── */
+    .article-wrapper {
+      max-width: 1200px; margin: 0 auto; padding: 0 40px 40px;
+      display: grid; grid-template-columns: 80px 1fr; gap: 32px;
+    }
+
+    .thumb-col { display: flex; flex-direction: column; gap: 10px; }
+    .thumb {
+      width: 60px; height: 60px; border-radius: 10px;
+      overflow: hidden; cursor: pointer; border: 2px solid transparent;
+      transition: border-color .2s;
+      background: #e8e0d0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .thumb.active { border-color: var(--red); }
+
+    .article-main { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+
+    .article-image-area {
+      background: var(--blue);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 340px; padding: 24px;
+      overflow: hidden;
+    }
+    .article-image-area .placeholder-img {
+      width: 100%; min-height: 290px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px; color: rgba(255,255,255,.8);
+      font-size: 13px; text-align: center;
+    }
+    .article-image-area .placeholder-img .icon { font-size: 52px; }
+
+    .article-info { padding: 8px 0; }
+
+    .category-tag {
+      display: inline-block;
+      background: var(--red); color: #fff;
+      font-size: 11px; font-weight: 700;
+      padding: 4px 12px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: .07em;
+      margin-bottom: 12px;
+    }
+
+    .article-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px; font-weight: 700;
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+    .article-subtitle {
+      font-size: 14px; color: var(--muted);
+      margin-bottom: 16px; line-height: 1.5;
+    }
+    .article-meta {
+      display: flex; gap: 16px; align-items: center;
+      font-size: 12px; color: var(--muted);
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e8e0d8;
+      flex-wrap: wrap;
+    }
+
+    .article-info h3 {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; margin: 18px 0 8px;
+      color: var(--muted);
+    }
+    .article-info p {
+      font-size: 14px; line-height: 1.8; color: var(--text);
+    }
+
+    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .tag {
+      background: #f0ece4; color: var(--text);
+      font-size: 12px; padding: 4px 12px; border-radius: 20px;
+      transition: background .2s; cursor: pointer;
+    }
+    .tag:hover { background: var(--yellow); }
+
+    .article-actions {
+      display: flex; align-items: center; gap: 10px; margin-top: 24px;
+    }
+    .btn-bookmark {
+      background: var(--red); color: #fff;
+      border: none; padding: 10px 24px; border-radius: 8px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    .btn-bookmark:hover { background: #bf3a2c; transform: translateY(-1px); }
+    .btn-share {
+      padding: 10px 18px; border-radius: 8px;
+      background: #fff; border: 1.5px solid #e0d8d0;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: border-color .2s;
+    }
+    .btn-share:hover { border-color: var(--red); }
+
+    .accordion { margin-top: 20px; }
+    .accordion-item {
+      border: 1.5px solid #e0d8d0; border-radius: 8px; overflow: hidden; margin-bottom: 8px;
+    }
+    .accordion-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; cursor: pointer;
+      font-size: 13px; font-weight: 500;
+      background: #fff; transition: background .2s;
+    }
+    .accordion-header:hover { background: #faf5ee; }
+    .accordion-header .toggle {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--red); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; flex-shrink: 0;
+    }
+
+    /* ── FEATURE BANNER ── */
+    .feature-banner {
+      max-width: 1200px; margin: 0 auto 32px;
+      padding: 0 40px;
+    }
+    .feature-inner {
+      background: var(--yellow);
+      border-radius: var(--radius);
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 24px;
+      padding: 32px 40px;
+    }
+    .feature-inner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px; font-style: italic;
+      color: var(--red); margin-bottom: 10px;
+    }
+    .feature-inner p { font-size: 13px; color: #555; max-width: 420px; line-height: 1.7; }
+    .btn-feature {
+      margin-top: 20px;
+      display: inline-block;
+      background: var(--red); color: #fff;
+      padding: 10px 24px; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-feature:hover { background: #bf3a2c; }
+    .feature-deco { font-size: 80px; opacity: .3; }
+
+    /* ── MORE ARTICLES ── */
+    .more-articles {
+      max-width: 1200px; margin: 0 auto 48px;
+      padding: 0 40px;
+    }
+    .more-articles h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; color: var(--red);
+      margin-bottom: 20px;
+    }
+    .articles-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    }
+    .article-card {
+      border-radius: var(--radius); overflow: hidden;
+      background: #fff; position: relative;
+      transition: transform .2s, box-shadow .2s;
+      cursor: pointer;
+    }
+    .article-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,.1); }
+    .article-card-img {
+      height: 180px; display: flex; align-items: center; justify-content: center;
+      font-size: 52px;
+    }
+    .article-card-img.yellow { background: var(--yellow); }
+    .article-card-img.pink { background: var(--pink); }
+    .article-card-img.blue { background: var(--blue); }
+    .article-card-img.red { background: #f5c5c0; }
+    .article-card-info { padding: 14px 14px 16px; }
+    .article-card-info .cat {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--red); margin-bottom: 6px;
+    }
+    .article-card-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+    .article-card-info p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .article-card-info .date { font-size: 11px; color: var(--muted); margin-top: 8px; }
+    .card-badge {
+      position: absolute; top: 10px; left: 10px;
+      background: var(--red); color: #fff;
+      font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+    }
+    .card-bookmark {
+      position: absolute; top: 10px; right: 10px;
+      background: #fff; border-radius: 50%; width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.1);
+    }
+    .btn-more {
+      display: block; margin: 24px auto 0;
+      background: transparent; border: 1.5px solid var(--text);
+      padding: 10px 36px; border-radius: 8px;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .btn-more:hover { background: var(--dark); color: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--red); color: #fff;
+      padding: 48px 40px 24px;
+    }
+    .footer-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 220px repeat(4, 1fr); gap: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px; font-style: italic;
+      line-height: 1; margin-bottom: 8px;
+    }
+    .footer-tagline { font-size: 12px; opacity: .65; line-height: 1.6; }
+    .footer-col h4 {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; margin-bottom: 12px; opacity: .7;
+    }
+    .footer-col a {
+      display: block; font-size: 13px; opacity: .85;
+      margin-bottom: 7px; transition: opacity .2s;
+    }
+    .footer-col a:hover { opacity: 1; }
+    .footer-email {
+      display: flex; margin-top: 8px; border-radius: 6px; overflow: hidden;
+    }
+    .footer-email input {
+      flex: 1; padding: 8px 12px; border: none;
+      font-size: 12px; outline: none;
+      background: rgba(255,255,255,.15); color: #fff;
+    }
+    .footer-email input::placeholder { color: rgba(255,255,255,.5); }
+    .footer-email button {
+      background: rgba(0,0,0,.2); color: #fff; border: none;
+      padding: 8px 14px; cursor: pointer; font-size: 12px;
+    }
+    .footer-bottom {
+      max-width: 1200px; margin: 20px auto 0;
+      display: flex; justify-content: space-between;
+      font-size: 11px; opacity: .6;
+    }
+
+    @media (max-width: 960px) {
+      .article-main { grid-template-columns: 1fr; }
+      .articles-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      .article-wrapper { padding: 0 16px 24px; grid-template-columns: 1fr; }
+      .thumb-col { flex-direction: row; }
+      .feature-inner { grid-template-columns: 1fr; }
+      .feature-deco { display: none; }
+      .more-articles { padding: 0 16px; }
+      .articles-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { padding: 32px 16px 16px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Plumpickers</div>
+  <div class="nav-links">
+    <a href="#" class="active">All</a>
+    <a href="#">Theatre</a>
+    <a href="#">Media</a>
+    <a href="#">Entertainment</a>
+    <a href="#">About</a>
+  </div>
+  <div class="nav-icons">
+    <span title="검색">🔍</span>
+    <span title="저장됨">🔖</span>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="#">← Archive</a>
+</div>
+
+<!-- ARTICLE DETAIL -->
+<div class="article-wrapper">
+  <div class="thumb-col">
+    <div class="thumb active">🎭</div>
+    <div class="thumb">🎬</div>
+    <div class="thumb">🎵</div>
+  </div>
+
+  <div class="article-main">
+    <div class="article-image-area">
+      <div class="placeholder-img">
+        <div class="icon">🖼️</div>
+        <div>대표 이미지가<br>이곳에 들어갑니다</div>
+      </div>
+    </div>
+
+    <div class="article-info">
+      <div class="category-tag">Theatre</div>
+      <div class="article-title">공연 제목이<br>이곳에 들어갑니다</div>
+      <div class="article-subtitle">부제 또는 간단한 소개 문구가 이곳에 들어갑니다</div>
+
+      <div class="article-meta">
+        <span>📅 2025. 01. 01</span>
+        <span>✍️ Plumpickers</span>
+      </div>
+
+      <h3>소개</h3>
+      <p>작품 또는 공연에 대한 소개 내용이 이곳에 들어갑니다. 미디어, 문화, 예술 분야의 새 소식을 아카이빙합니다.</p>
+
+      <h3>태그</h3>
+      <div class="tag-list">
+        <span class="tag">#Theatre</span>
+        <span class="tag">#공연</span>
+        <span class="tag">#서울</span>
+        <span class="tag">#2025</span>
+      </div>
+
+      <div class="article-actions">
+        <button class="btn-bookmark">🔖 저장하기</button>
+        <button class="btn-share">↗ 공유</button>
+      </div>
+
+      <div class="accordion">
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAcc(this)">
+            공연 / 전시 정보
+            <div class="toggle">+</div>
+          </div>
+          <div class="accordion-body" style="display:none;padding:14px 16px;font-size:13px;line-height:1.8;background:#faf5ee;">
+            장소, 일정, 티켓 정보 등이 이곳에 들어갑니다.
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAcc(this)">
+            관련 링크
+            <div class="toggle">+</div>
+          </div>
+          <div class="accordion-body" style="display:none;padding:14px 16px;font-size:13px;line-height:1.8;background:#faf5ee;">
+            공식 사이트, 예매 링크 등 관련 URL이 이곳에 들어갑니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURE BANNER -->
+<div class="feature-banner">
+  <div class="feature-inner">
+    <div>
+      <h2>지금 주목할 것들</h2>
+      <p>Theatre, Media, Entertainment — 이 계절의 문화예술 새 소식을 한곳에서 만나보세요. Plumpickers가 직접 고른 아카이브입니다.</p>
+      <div class="btn-feature">아카이브 전체 보기</div>
+    </div>
+    <div class="feature-deco">🎭</div>
+  </div>
+</div>
+
+<!-- MORE ARTICLES -->
+<div class="more-articles">
+  <h2>더 보기</h2>
+  <div class="articles-grid">
+    <div class="article-card">
+      <div class="article-card-img yellow">🎭</div>
+      <div class="article-card-info">
+        <div class="cat">Theatre</div>
+        <h4>공연 제목</h4>
+        <p>간단한 소개 문구</p>
+        <div class="date">2025. 01. 01</div>
+      </div>
+      <div class="card-bookmark">🔖</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card-img pink">🎬</div>
+      <div class="article-card-info">
+        <div class="cat">Media</div>
+        <h4>미디어 제목</h4>
+        <p>간단한 소개 문구</p>
+        <div class="date">2025. 01. 01</div>
+      </div>
+      <div class="card-badge">NEW</div>
+      <div class="card-bookmark">🔖</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card-img blue">🎵</div>
+      <div class="article-card-info">
+        <div class="cat">Entertainment</div>
+        <h4>엔터테인먼트 제목</h4>
+        <p>간단한 소개 문구</p>
+        <div class="date">2025. 01. 01</div>
+      </div>
+      <div class="card-badge">NEW</div>
+      <div class="card-bookmark">🔖</div>
+    </div>
+    <div class="article-card">
+      <div class="article-card-img red">🖼️</div>
+      <div class="article-card-info">
+        <div class="cat">Theatre</div>
+        <h4>전시 제목</h4>
+        <p>간단한 소개 문구</p>
+        <div class="date">2025. 01. 01</div>
+      </div>
+      <div class="card-bookmark">🔖</div>
+    </div>
+  </div>
+  <button class="btn-more">더 보기</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Plumpickers</div>
+      <div class="footer-tagline">Theatre / Media / Entertainment<br>문화예술 아카이브</div>
+    </div>
+    <div class="footer-col">
+      <h4>Category</h4>
+      <a href="#">All</a>
+      <a href="#">Theatre</a>
+      <a href="#">Media</a>
+      <a href="#">Entertainment</a>
+    </div>
+    <div class="footer-col">
+      <h4>Archive</h4>
+      <a href="#">최신 소식</a>
+      <a href="#">추천 아카이브</a>
+      <a href="#">태그 모아보기</a>
+    </div>
+    <div class="footer-col">
+      <h4>Social</h4>
+      <a href="#">Instagram</a>
+      <a href="#">Twitter / X</a>
+      <a href="#">Letterboxd</a>
+    </div>
+    <div class="footer-col">
+      <h4>Newsletter</h4>
+      <p style="font-size:12px;opacity:.75;line-height:1.5;margin-bottom:10px;">새로운 아카이브 소식을 이메일로 받아보세요.</p>
+      <div class="footer-email">
+        <input type="email" placeholder="이메일 주소"/>
+        <button>→</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Plumpickers</span>
+    <span>Privacy Policy</span>
+  </div>
+</footer>
+
+<script>
+  function toggleAcc(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.toggle');
+    const isOpen = body.style.display === 'block';
+    body.style.display = isOpen ? 'none' : 'block';
+    toggle.textContent = isOpen ? '+' : '−';
+  }
+
+  document.querySelectorAll('.thumb').forEach(th => {
+    th.addEventListener('click', () => {
+      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+      th.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

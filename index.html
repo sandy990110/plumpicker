@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rayo – Designer Lamps & Gifts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #D94A3A;
+      --yellow: #F5C842;
+      --blue: #87C4D4;
+      --cream: #F9F3EC;
+      --pink: #F2BEBC;
+      --dark: #1A1A1A;
+      --text: #3A3A3A;
+      --muted: #888;
+      --radius: 12px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--cream);
+      border-bottom: 1px solid #e8e0d8;
+      position: sticky; top: 0; z-index: 100;
+      padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-style: italic;
+      color: var(--red);
+      letter-spacing: -0.5px;
+    }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500; color: var(--text);
+      padding: 6px 14px; border-radius: 20px;
+      transition: background .2s;
+    }
+    .nav-links a.active, .nav-links a:hover {
+      background: var(--red); color: #fff;
+    }
+    .nav-icons { display: flex; gap: 16px; align-items: center; }
+    .nav-icons span {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #eee; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 15px; transition: background .2s;
+    }
+    .nav-icons span:hover { background: var(--red); color: #fff; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      padding: 12px 40px;
+      font-size: 12px; color: var(--muted);
+    }
+    .breadcrumb a { color: var(--muted); }
+    .breadcrumb a:hover { color: var(--red); }
+
+    /* ── PRODUCT SECTION ── */
+    .product-wrapper {
+      max-width: 1200px; margin: 0 auto; padding: 0 40px 40px;
+      display: grid; grid-template-columns: 200px 1fr; gap: 32px;
+    }
+
+    /* Thumbnails */
+    .thumb-col { display: flex; flex-direction: column; gap: 10px; }
+    .thumb {
+      width: 60px; height: 60px; border-radius: 10px;
+      overflow: hidden; cursor: pointer; border: 2px solid transparent;
+      transition: border-color .2s;
+    }
+    .thumb.active { border-color: var(--red); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .color-swatches { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+    .swatch {
+      width: 22px; height: 22px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: border-color .2s;
+    }
+    .swatch:hover { border-color: #999; }
+    .swatch.active { border-color: var(--dark); }
+
+    /* Product main */
+    .product-main { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+
+    .product-image-area {
+      background: var(--blue);
+      border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 340px; padding: 24px;
+    }
+    .product-image-area img { max-height: 280px; object-fit: contain; filter: drop-shadow(0 8px 24px rgba(0,0,0,.18)); }
+
+    .product-info { padding: 8px 0; }
+    .stars { color: var(--yellow); font-size: 14px; margin-bottom: 4px; }
+    .stars span { color: var(--red); font-size: 12px; margin-left: 6px; font-weight: 500; }
+    .product-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px; font-weight: 700;
+      color: var(--red);
+      line-height: 1.1;
+    }
+    .product-price { font-size: 28px; font-weight: 600; color: var(--dark); margin-bottom: 8px; }
+    .product-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+
+    .product-info h3 {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; margin: 16px 0 6px;
+    }
+    .product-info p, .product-info li {
+      font-size: 13px; line-height: 1.7; color: var(--text);
+    }
+    .product-info ul { padding-left: 16px; }
+
+    .product-actions {
+      display: flex; align-items: center; gap: 12px; margin-top: 20px;
+    }
+    .qty-control {
+      display: flex; align-items: center; gap: 0;
+      border: 1.5px solid #ddd; border-radius: 8px; overflow: hidden;
+    }
+    .qty-control button {
+      width: 32px; height: 36px; border: none; background: #f5f5f5;
+      font-size: 16px; cursor: pointer; transition: background .2s;
+    }
+    .qty-control button:hover { background: var(--red); color: #fff; }
+    .qty-control input {
+      width: 40px; height: 36px; border: none; text-align: center;
+      font-size: 14px; background: #fff;
+    }
+    .btn-cart {
+      background: var(--red); color: #fff;
+      border: none; padding: 10px 28px; border-radius: 8px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    .btn-cart:hover { background: #bf3a2c; transform: translateY(-1px); }
+    .btn-wish {
+      width: 38px; height: 38px; border-radius: 8px;
+      background: #fff; border: 1.5px solid #e0d8d0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; cursor: pointer; transition: border-color .2s;
+    }
+    .btn-wish:hover { border-color: var(--red); }
+
+    .accordion { margin-top: 20px; }
+    .accordion-item {
+      border: 1.5px solid #e0d8d0; border-radius: 8px; overflow: hidden; margin-bottom: 8px;
+    }
+    .accordion-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; cursor: pointer;
+      font-size: 13px; font-weight: 500;
+      background: #fff; transition: background .2s;
+    }
+    .accordion-header:hover { background: #faf5ee; }
+    .accordion-header .toggle {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--red); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700;
+    }
+
+    /* ── GIFT BANNER ── */
+    .gift-banner {
+      max-width: 1200px; margin: 0 auto 32px;
+      padding: 0 40px;
+    }
+    .gift-inner {
+      background: var(--yellow);
+      border-radius: var(--radius);
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 24px;
+      padding: 32px 40px;
+      overflow: hidden; position: relative;
+    }
+    .gift-inner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px; font-style: italic;
+      color: var(--red); margin-bottom: 10px;
+    }
+    .gift-inner p { font-size: 13px; color: #555; max-width: 380px; line-height: 1.6; }
+    .btn-gift {
+      margin-top: 20px;
+      display: inline-block;
+      background: var(--red); color: #fff;
+      padding: 10px 24px; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-gift:hover { background: #bf3a2c; }
+    .gift-card-img {
+      display: flex; gap: -12px; align-items: center;
+    }
+    .gift-card {
+      width: 130px; background: var(--red); border-radius: 12px;
+      padding: 20px 16px; color: #fff; position: relative;
+      box-shadow: 4px 4px 16px rgba(0,0,0,.15);
+    }
+    .gift-card.back {
+      position: absolute; right: 52px; top: 20px;
+      background: #e85f4f; transform: rotate(-8deg);
+      z-index: 0;
+    }
+    .gift-card.front { z-index: 1; }
+    .gift-card-label {
+      font-size: 11px; font-weight: 600; letter-spacing: .06em;
+      text-transform: uppercase; opacity: .7; margin-bottom: 8px;
+    }
+    .gift-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; font-style: italic;
+    }
+    .gift-card-flowers { font-size: 24px; margin-top: 10px; }
+    .gift-card-area { position: relative; width: 200px; height: 160px; }
+
+    /* ── YOU MIGHT LIKE ── */
+    .recommendations {
+      max-width: 1200px; margin: 0 auto 48px;
+      padding: 0 40px;
+    }
+    .recommendations h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; color: var(--red);
+      margin-bottom: 20px;
+    }
+    .rec-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    }
+    .rec-card {
+      border-radius: var(--radius); overflow: hidden;
+      background: #fff; position: relative;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .rec-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,.1); }
+    .rec-card-img {
+      height: 180px; display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .rec-card-img.yellow { background: var(--yellow); }
+    .rec-card-img.pink { background: var(--pink); }
+    .rec-card-img.blue { background: var(--blue); }
+    .rec-card-img.red { background: #f5c5c0; }
+    .rec-card-img img { max-height: 130px; object-fit: contain; filter: drop-shadow(0 4px 12px rgba(0,0,0,.15)); }
+    .rec-card-info { padding: 14px 14px 16px; }
+    .rec-card-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .rec-card-info p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .rec-card-info .price { font-size: 13px; font-weight: 600; margin-top: 6px; }
+    .rec-badge {
+      position: absolute; top: 10px; left: 10px;
+      background: var(--red); color: #fff;
+      font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+    }
+    .rec-wish {
+      position: absolute; top: 10px; right: 10px;
+      background: #fff; border-radius: 50%; width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.1);
+    }
+    .btn-more {
+      display: block; margin: 24px auto 0;
+      background: transparent; border: 1.5px solid var(--text);
+      padding: 10px 36px; border-radius: 8px;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .btn-more:hover { background: var(--dark); color: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--red); color: #fff;
+      padding: 48px 40px 24px;
+    }
+    .footer-grid {
+      max-width: 1200px; margin: 0 auto;
+      display: grid; grid-template-columns: 200px repeat(4, 1fr); gap: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px; font-style: italic;
+      line-height: 1;
+    }
+    .footer-col h4 {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; margin-bottom: 12px; opacity: .7;
+    }
+    .footer-col a {
+      display: block; font-size: 13px; opacity: .85;
+      margin-bottom: 7px; transition: opacity .2s;
+    }
+    .footer-col a:hover { opacity: 1; }
+    .footer-email {
+      display: flex; margin-top: 8px; border-radius: 6px; overflow: hidden;
+    }
+    .footer-email input {
+      flex: 1; padding: 8px 12px; border: none;
+      font-size: 12px; outline: none;
+      background: rgba(255,255,255,.15); color: #fff;
+    }
+    .footer-email input::placeholder { color: rgba(255,255,255,.5); }
+    .footer-email button {
+      background: rgba(0,0,0,.2); color: #fff; border: none;
+      padding: 8px 14px; cursor: pointer; font-size: 12px;
+    }
+    .footer-bottom {
+      max-width: 1200px; margin: 20px auto 0;
+      display: flex; justify-content: space-between;
+      font-size: 11px; opacity: .6;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .product-main { grid-template-columns: 1fr; }
+      .rec-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      .product-wrapper { padding: 0 16px 24px; grid-template-columns: 1fr; }
+      .thumb-col { flex-direction: row; }
+      .gift-inner { grid-template-columns: 1fr; }
+      .gift-card-area { display: none; }
+      .recommendations { padding: 0 16px; }
+      .rec-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { padding: 32px 16px 16px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Rayo</div>
+  <div class="nav-links">
+    <a href="#" class="active">Catalog</a>
+    <a href="#">Designers</a>
+    <a href="#">About</a>
+    <a href="#">Journal</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="nav-icons">
+    <span>🔍</span>
+    <span>♡</span>
+    <span>🛒</span>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="#">← Catalog</a>
+</div>
+
+<!-- PRODUCT -->
+<div class="product-wrapper">
+  <!-- Thumbs + swatches -->
+  <div class="thumb-col">
+    <div class="thumb active">
+      <div style="width:100%;height:100%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:22px;">💡</div>
+    </div>
+    <div class="thumb">
+      <div style="width:100%;height:100%;background:#e8e0d0;display:flex;align-items:center;justify-content:center;font-size:22px;">🪴</div>
+    </div>
+    <div class="color-swatches">
+      <div class="swatch active" style="background:#87C4D4;" title="Blue"></div>
+      <div class="swatch" style="background:#D94A3A;" title="Red"></div>
+      <div class="swatch" style="background:#F5C842;" title="Yellow"></div>
+      <div class="swatch" style="background:#888;" title="Grey"></div>
+    </div>
+  </div>
+
+  <!-- Main product content -->
+  <div class="product-main">
+    <div class="product-image-area">
+      <!-- Stylized lamp SVG -->
+      <svg viewBox="0 0 200 260" width="220" height="260" xmlns="http://www.w3.org/2000/svg">
+        <!-- stem -->
+        <rect x="94" y="160" width="12" height="70" rx="6" fill="#5aa8c0"/>
+        <!-- base -->
+        <ellipse cx="100" cy="232" rx="44" ry="12" fill="#5aa8c0"/>
+        <!-- shade -->
+        <ellipse cx="100" cy="80" rx="72" ry="22" fill="#6bb5cd"/>
+        <path d="M28,80 Q36,160 94,162 L106,162 Q164,160 172,80 Z" fill="#87C4D4"/>
+        <!-- top cap -->
+        <ellipse cx="100" cy="58" rx="24" ry="8" fill="#5aa8c0"/>
+        <!-- highlight -->
+        <ellipse cx="80" cy="100" rx="12" ry="28" fill="rgba(255,255,255,.2)" transform="rotate(-10,80,100)"/>
+        <!-- glow -->
+        <ellipse cx="100" cy="162" rx="30" ry="6" fill="rgba(255,220,100,.35)"/>
+      </svg>
+    </div>
+
+    <div class="product-info">
+      <div class="stars">★★★★★ <span>7 reviews</span></div>
+      <div style="display:flex;align-items:baseline;gap:24px;">
+        <div class="product-title">Luma</div>
+        <div class="product-price">100$</div>
+      </div>
+      <div class="product-subtitle">Stylish lamp with soft light</div>
+
+      <h3>Description</h3>
+      <p>Luma is a combination of retro aesthetics and modern design. Smooth shapes, pleasant matte texture and soft diffused lighting create a cozy atmosphere in any space.</p>
+
+      <h3>Features</h3>
+      <ul>
+        <li>Material: plastic with matte finish</li>
+        <li>Dimensions: 30 × 25 cm</li>
+        <li>Light source: led bulb (1 m)</li>
+        <li>Power supply: usb or adapter (included)</li>
+        <li>Color temperature: 2700k (warm light)</li>
+        <li>Weight: 1.2 kg</li>
+      </ul>
+
+      <div class="product-actions">
+        <div class="qty-control">
+          <button onclick="changeQty(-1)">−</button>
+          <input id="qty" type="text" value="1" readonly/>
+          <button onclick="changeQty(1)">+</button>
+        </div>
+        <button class="btn-cart">Add to cart</button>
+        <button class="btn-wish">♡</button>
+      </div>
+
+      <div class="accordion">
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAcc(this)">
+            Product care instructions
+            <div class="toggle">+</div>
+          </div>
+          <div class="accordion-body" style="display:none;padding:14px 16px;font-size:13px;line-height:1.7;background:#faf5ee;">
+            Wipe with a soft dry cloth. Avoid harsh chemicals. Keep away from water.
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAcc(this)">
+            Delivery and payment
+            <div class="toggle">+</div>
+          </div>
+          <div class="accordion-body" style="display:none;padding:14px 16px;font-size:13px;line-height:1.7;background:#faf5ee;">
+            Free delivery on orders over $80. Standard shipping 3–5 business days. Express available.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GIFT BANNER -->
+<div class="gift-banner">
+  <div class="gift-inner">
+    <div>
+      <h2>Rayo gift inside</h2>
+      <p>Give the gift of style and atmosphere! Inside — unique designer items that will decorate any interior and give joy. An ideal choice for those who appreciate aesthetics and quality.</p>
+      <div class="btn-gift">Unwrap your gift</div>
+    </div>
+    <div class="gift-card-area">
+      <div class="gift-card back">
+        <div class="gift-card-label">Gift</div>
+        <div class="gift-card-title">Rayo</div>
+        <div class="gift-card-flowers">🌸</div>
+      </div>
+      <div class="gift-card front" style="position:absolute;right:0;bottom:0;">
+        <div class="gift-card-label">Gift Card</div>
+        <div class="gift-card-title">Rayo</div>
+        <div class="gift-card-flowers">✿ ✿</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- YOU MIGHT LIKE -->
+<div class="recommendations">
+  <h2>You might like</h2>
+  <div class="rec-grid">
+    <!-- Card 1 -->
+    <div class="rec-card">
+      <div class="rec-card-img yellow">
+        <svg viewBox="0 0 120 140" width="100" xmlns="http://www.w3.org/2000/svg">
+          <rect x="54" y="90" width="12" height="40" rx="6" fill="#d4a800"/>
+          <ellipse cx="60" cy="132" rx="28" ry="8" fill="#d4a800"/>
+          <ellipse cx="60" cy="46" rx="46" ry="14" fill="#e8b800"/>
+          <path d="M14,46 Q20,92 54,94 L66,94 Q100,92 106,46 Z" fill="#F5C842"/>
+          <ellipse cx="60" cy="32" rx="16" ry="6" fill="#d4a800"/>
+        </svg>
+      </div>
+      <div class="rec-card-info">
+        <h4>Sunny glow</h4>
+        <p>Warm and cheerful table lamp</p>
+        <div class="price">120$</div>
+      </div>
+      <div class="rec-wish">♡</div>
+    </div>
+    <!-- Card 2 -->
+    <div class="rec-card">
+      <div class="rec-card-img pink">
+        <svg viewBox="0 0 120 100" width="100" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="60" cy="60" rx="50" ry="30" fill="#9a6fb0"/>
+          <ellipse cx="30" cy="52" rx="16" ry="16" fill="#b07acf"/>
+          <ellipse cx="60" cy="45" rx="18" ry="18" fill="#c490e0"/>
+          <ellipse cx="90" cy="52" rx="16" ry="16" fill="#b07acf"/>
+          <ellipse cx="45" cy="68" rx="14" ry="14" fill="#b07acf"/>
+          <ellipse cx="75" cy="68" rx="14" ry="14" fill="#b07acf"/>
+        </svg>
+      </div>
+      <div class="rec-card-info">
+        <h4>Wave seat</h4>
+        <p>Sculptural lounge chair</p>
+        <div class="price">100$</div>
+      </div>
+      <div class="rec-badge">NEW</div>
+      <div class="rec-wish">♡</div>
+    </div>
+    <!-- Card 3 -->
+    <div class="rec-card">
+      <div class="rec-card-img blue">
+        <svg viewBox="0 0 120 140" width="90" xmlns="http://www.w3.org/2000/svg">
+          <rect x="56" y="100" width="8" height="32" rx="4" fill="#5aa8c0"/>
+          <ellipse cx="60" cy="134" rx="22" ry="6" fill="#5aa8c0"/>
+          <circle cx="60" cy="60" r="44" fill="#6bbdcf"/>
+          <circle cx="60" cy="60" r="32" fill="#87C4D4"/>
+          <ellipse cx="48" cy="46" rx="10" ry="16" fill="rgba(255,255,255,.25)" transform="rotate(-15,48,46)"/>
+          <ellipse cx="60" cy="102" rx="18" ry="5" fill="rgba(255,220,100,.4)"/>
+        </svg>
+      </div>
+      <div class="rec-card-info">
+        <h4>Eureka</h4>
+        <p>Globe pendant light</p>
+        <div class="price">80$</div>
+      </div>
+      <div class="rec-badge">NEW</div>
+      <div class="rec-wish">♡</div>
+    </div>
+    <!-- Card 4 -->
+    <div class="rec-card">
+      <div class="rec-card-img red">
+        <svg viewBox="0 0 120 160" width="90" xmlns="http://www.w3.org/2000/svg">
+          <rect x="56" y="110" width="8" height="40" rx="4" fill="#c0856a"/>
+          <ellipse cx="60" cy="152" rx="26" ry="8" fill="#c0856a"/>
+          <path d="M20,50 Q30,110 56,112 L64,112 Q90,110 100,50 Q80,20 60,18 Q40,20 20,50 Z" fill="#d4a080"/>
+          <ellipse cx="60" cy="50" rx="40" ry="18" fill="#e0b090"/>
+          <ellipse cx="60" cy="32" rx="18" ry="7" fill="#c0856a"/>
+        </svg>
+      </div>
+      <div class="rec-card-info">
+        <h4>Vesper lamp</h4>
+        <p>Elegant evening floor light</p>
+        <div class="price">95$</div>
+      </div>
+      <div class="rec-wish">♡</div>
+    </div>
+  </div>
+  <button class="btn-more">Show more</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Rayo</div>
+    </div>
+    <div class="footer-col">
+      <h4>Menu</h4>
+      <a href="#">Catalog</a>
+      <a href="#">Designers</a>
+      <a href="#">About</a>
+      <a href="#">Journal</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Shipping</h4>
+      <a href="#">Delivery network</a>
+      <a href="#">Time & Cost</a>
+      <a href="#">Order tracking</a>
+    </div>
+    <div class="footer-col">
+      <h4>Social</h4>
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+      <a href="#">Facebook</a>
+    </div>
+    <div class="footer-col">
+      <h4>More ideas, More Rayo.</h4>
+      <p style="font-size:12px;opacity:.75;line-height:1.5;margin-bottom:10px;">Subscribe to the Rayo newsletter: ideas on collections, articles and special offers.</p>
+      <div class="footer-email">
+        <input type="email" placeholder="Email"/>
+        <button>→</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 rayo, more-rayo@gmail.com</span>
+    <span>Privacy policy</span>
+  </div>
+</footer>
+
+<script>
+  function changeQty(delta) {
+    const input = document.getElementById('qty');
+    let val = parseInt(input.value) + delta;
+    if (val < 1) val = 1;
+    input.value = val;
+  }
+
+  function toggleAcc(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.toggle');
+    const isOpen = body.style.display === 'block';
+    body.style.display = isOpen ? 'none' : 'block';
+    toggle.textContent = isOpen ? '+' : '−';
+  }
+
+  // Color swatch switching
+  document.querySelectorAll('.swatch').forEach(sw => {
+    sw.addEventListener('click', () => {
+      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      sw.classList.add('active');
+    });
+  });
+
+  // Thumbnail switching
+  document.querySelectorAll('.thumb').forEach(th => {
+    th.addEventListener('click', () => {
+      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+      th.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
